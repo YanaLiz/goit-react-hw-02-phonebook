@@ -1,79 +1,87 @@
+// import { Container } from '@mui/system'
+import React, { Component } from 'react'
+// import { Component } from 'react';
+import ContactForm from './Contacts/ContactsForm';
+import ContactList from './Contacts/ContactList';
+import { Filter } from './Contacts/FilterContacts';
 
-import { Component } from 'react';
-import  ContactsForm from './Contacts/ContactsForm';
-import Form from './Contacts/Form'
-import  Filter  from './Contacts/FilterContacts';
 
-// import { nanoid } from 'nanoid';
-
-export class App extends Component{
-state = {
-  contacts: [
-    {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-    {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-    {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-    {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
-  ],
-  filter: '',
-  name: '',
-  number: ''
-}
-
-  addContacts = contactsId => {
-    console.log(contactsId)
-
+export class App extends Component {
+  state = {
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', tel: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', tel: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', tel: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', tel: '227-91-26' },
+    ],
+    filter: ''
   }
 
-  formSubmitHandler = data => {
-    console.log(data)
-  }
   changeFilter = e => {
-    this.setState({filter:e.currentTarget.value})
-  }
-  // getVisibleContacts = () => {
-  //   const { filter, contacts } = this.state;
-  //   const normalizedFilter = filter.toLowerCase;
-  //   return this.state.contacts.filter(contacts =>
-  //     contacts.text.toLowerCase().includes(normalizedFilter),
-  //     )
-  // }
+    this.setState({ filter: e.currentTarget.value });
+  };
 
+  handleSubmit = object => {
+    const { contacts } = this.state;
+    this.setState({ contacts: [...contacts, object] });
+    console.log(object)
+
+    const checkContact = contacts.find(
+      contact => contact.name.toLowerCase() === object.name.toLowerCase()
+    );
+
+    console.log(checkContact);
+    if (checkContact) {
+      alert(`${object.name} is already in contacts `);
+    }
+
+  }
+
+
+  deleteContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(el => el.id !== id),
+    }))
+  }
+
+
+  findGoodContacts = () => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.name === this.state.filter),
+    }))
+
+
+  }
+
+  filterByName = e => {
+    this.setState({
+      filter: e.currentTarget.value,
+    });
+  };
+
+  visibileContacts = () => {
+    const { contacts, filter } = this.state;
+    const normalize = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalize)
+    );
+  };
   render() {
-    // const visibleContacts=this.getVisibleContacts()
+    const visibileContacts = this.visibileContacts();
+    console.log(this.state);
     return (
-    <div
-      style={{
-        // height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      <h1>Phonebook</h1>
-          <Form onSubmit={this.formSubmitHandler} />
-          <h2>Contacts</h2>
-        {/* <ContactsForm onSubmit={this.addContacts} /> */}
-        {/* <Filter/> */}
-        <Filter value={this.filter} onChange={this.changeFilter} />
-        <ContactsForm onDelete={this.handleDelete} contacts={this.contacts} />
-    </div>
-  );
-
+      <div>
+        <h1>Phonebook</h1>
+        <ContactForm onSubmit={this.handleSubmit} />
+        <h2>Contacts</h2>
+        <Filter filterName={this.filterByName} value={this.state.filter} />
+        <ContactList
+          contacts={visibileContacts}
+          onDelete={this.deleteContact}
+        />
+      </div>
+    );
   }
-}
 
-
-
-
-
-
-
-
-
-
-
-
+};
 
