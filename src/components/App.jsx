@@ -23,18 +23,17 @@ export class App extends Component {
 
   handleSubmit = object => {
     const { contacts } = this.state;
-    this.setState({ contacts: [...contacts, object] });
-    console.log(object)
-
     const checkContact = contacts.find(
       contact => contact.name.toLowerCase() === object.name.toLowerCase()
     );
 
     console.log(checkContact);
-    if (checkContact) {
-      alert(`${object.name} is already in contacts `);
+    if (!checkContact) {
+      this.setState({ contacts: [...contacts, object] });
+      console.log(object)
+      return;
     }
-
+    alert(`${object.name} is already in contacts `);
   }
 
 
@@ -44,20 +43,6 @@ export class App extends Component {
     }))
   }
 
-
-  findGoodContacts = () => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.name === this.state.filter),
-    }))
-
-
-  }
-
-  filterByName = e => {
-    this.setState({
-      filter: e.currentTarget.value,
-    });
-  };
 
   visibileContacts = () => {
     const { contacts, filter } = this.state;
@@ -74,7 +59,7 @@ export class App extends Component {
         <h1>Phonebook</h1>
         <ContactForm onSubmit={this.handleSubmit} />
         <h2>Contacts</h2>
-        <Filter filterName={this.filterByName} value={this.state.filter} />
+        <Filter filterName={this.changeFilter} value={this.state.filter} />
         <ContactList
           contacts={visibileContacts}
           onDelete={this.deleteContact}
