@@ -26,13 +26,9 @@ export class App extends Component {
     const checkContact = contacts.find(
       contact => contact.name.toLowerCase() === obj.name.toLowerCase()
     );
-    console.log(this.state.contacts)
-    console.log(contacts)
-    console.log(checkContact);
     if (!checkContact) {
       this.setState({ contacts: [...contacts, obj] });
-      console.log(obj)
-      // this.reset();
+      // console.log(obj)
       return;
     }
     alert(`${obj.name} is already in contacts `);
@@ -59,7 +55,7 @@ export class App extends Component {
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm onSubmit={this.handleSubmit} contacts={this.props.contacts} />
+        <ContactForm onSubmit={this.handleSubmit} contacts={this.state.contacts} />
         <h2>Contacts</h2>
         <Filter filterName={this.changeFilter} value={this.state.filter} />
         <ContactList
