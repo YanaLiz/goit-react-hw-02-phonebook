@@ -9,10 +9,10 @@ import { Filter } from './Contacts/FilterContacts';
 export class App extends Component {
   state = {
     contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', tel: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', tel: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', tel: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', tel: '227-91-26' },
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: ''
   }
@@ -21,19 +21,21 @@ export class App extends Component {
     this.setState({ filter: e.currentTarget.value });
   };
 
-  handleSubmit = object => {
+  handleSubmit = obj => {
     const { contacts } = this.state;
     const checkContact = contacts.find(
-      contact => contact.name.toLowerCase() === object.name.toLowerCase()
+      contact => contact.name.toLowerCase() === obj.name.toLowerCase()
     );
-
+    console.log(this.state.contacts)
+    console.log(contacts)
     console.log(checkContact);
     if (!checkContact) {
-      this.setState({ contacts: [...contacts, object] });
-      console.log(object)
+      this.setState({ contacts: [...contacts, obj] });
+      console.log(obj)
+      // this.reset();
       return;
     }
-    alert(`${object.name} is already in contacts `);
+    alert(`${obj.name} is already in contacts `);
   }
 
 
@@ -57,7 +59,7 @@ export class App extends Component {
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm onSubmit={this.handleSubmit} />
+        <ContactForm onSubmit={this.handleSubmit} contacts={this.props.contacts} />
         <h2>Contacts</h2>
         <Filter filterName={this.changeFilter} value={this.state.filter} />
         <ContactList
@@ -68,5 +70,5 @@ export class App extends Component {
     );
   }
 
-};
 
+};

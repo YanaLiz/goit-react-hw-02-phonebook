@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import css from './Styles.module.css'
 import { nanoid } from "nanoid";
+import PropTypes from 'prop-types'
 
 
 class ContactForm extends Component {
@@ -15,13 +16,42 @@ class ContactForm extends Component {
     this.setState({ [name]: value, });
   }
 
+  // handleSubmit = event => {
+  //   event.preventDefault();
+  //   const { name, number } = this.state;
+  //   console.log(this.state)
+  //   const { onSubmit } = this.props;
+  //   const obj = { name: name, number: number, id: nanoid() };
+  //   onSubmit(obj);
+  //   console.log(name)
+  //   console.log(this.object)
+  //   if ((name !== obj.name)) {
+  //     this.reset();
+
+  //   } else {
+  //     return alert(`${obj.name} is already in contacts `)
+
+  //   }
+  //   //  this.reset();
+
+  // };
+
   handleSubmit = event => {
     event.preventDefault();
     console.log(this.state)
+    // const newArray = [];
     const { name, number } = this.state;
-    const { onSubmit } = this.props;
+    // const onSubmit = this.props;
     const obj = { name: name, number: number, id: nanoid() };
+    // newArray.push(obj)
+    // console.log(newArray)
+    console.log(obj)
     onSubmit(obj);
+    const { onSubmit, contacts } = this.props;
+    if (contacts.find(contact => contact.name === name)) {
+      return;
+    }
+
     this.reset();
   }
 
@@ -68,5 +98,12 @@ class ContactForm extends Component {
     )
   }
 }
+
+
+ContactForm.propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.object),
+  onSubmit: PropTypes.func.isRequired,
+}
+
 export default ContactForm;
 
